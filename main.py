@@ -1,7 +1,3 @@
-import random
-from pprint import pprint
-
-from card import Card
 from deck import Deck
 from game_controller import GameController
 import pandas
@@ -14,9 +10,10 @@ deck = Deck(deck_data.values.tolist())
 for card in deck.cards:
     print(f"{card.value} {card.suit}")
 
-is_player_turn = True
+is_user_turn = True
 is_dealer_turn = True
-player_won = False
+user_busted = False
+user_won = False
 user = Player()
 dealer = Player()
 
@@ -31,9 +28,9 @@ for _ in range(2):
 user.score = game_controller.calculate_score(sorted(user.hand, key=lambda cards: card.return_card_value()))
 dealer.score = game_controller.calculate_score(sorted(dealer.hand, key=lambda cards: card.return_card_value()))
 if user.score == 21:
-    player_won = True
+    user_won = True
 
-while is_player_turn and not player_won:
+while is_user_turn and not user_won and not user_busted:
     print(f"This is your hand: {user.convert_hand_to_list()} with a score of: {user.score}")
     print(f"This is the dealer hand: {dealer.hand[1].value}")
     player_decision = input(f"What do you want to do? 'hit', 'stand': ")
@@ -42,15 +39,17 @@ while is_player_turn and not player_won:
         user.hand.append(random_card)
         deck.cards.remove(random_card)
     elif player_decision.lower() == "stand":
-        is_player_turn = False
+        is_user_turn = False
     user.score = game_controller.calculate_score(sorted(user.hand, key=lambda cards: card.return_card_value()))
-    if user.score >= 21:
-        is_player_turn = False
+    if user.score == 21:
+        is_user_turn = False
+    if user.score > 21:
+        user_busted = True
 
-if dealer.score >= 17:
+if dealer.score >= 17 or user_won:
     is_dealer_turn = False
 
-while is_dealer_turn:
+while is_dealer_turn and not user_busted:
     random_card = game_controller.deal_cards(deck.cards)
     dealer.hand.append(random_card)
     deck.cards.remove(random_card)
@@ -58,8 +57,23 @@ while is_dealer_turn:
     if dealer.score >= 17:
         is_dealer_turn = False
 
+if user_won:
+    print(f"This is your hand: {user.convert_hand_to_list()} with a score of: {user.score}")
+    print(f"This is the dealer's hand : {dealer.convert_hand_to_list()} with a score of: {dealer.score}")
+    print("You won!")
+elif not user_busted and dealer.score > 21:
+    print(f"This is your hand: {user.convert_hand_to_list()} with a score of: {user.score}")
+    print(f"This is the dealer's hand : {dealer.convert_hand_to_list()} with a score of: {dealer.score}")
+    print("You won!")
+elif user.score > dealer.score and not user_busted:
+    print(f"This is your hand: {user.convert_hand_to_list()} with a score of: {user.score}")
+    print(f"This is the dealer's hand : {dealer.convert_hand_to_list()} with a score of: {dealer.score}")
+    print("You won!")
+else:
+    print(f"This is your hand: {user.convert_hand_to_list()} with a score of: {user.score}")
+    print(f"This is the dealer's hand : {dealer.convert_hand_to_list()} with a score of: {dealer.score}")
+    print("You lost!")
 
-print(f"This is your hand: {user.convert_hand_to_list()} with a score of: {user.score}")
 
 
 #
