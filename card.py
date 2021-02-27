@@ -3,7 +3,7 @@ class Card:
         self.value = value
         self.suit = suit
 
-    def return_card_value(self)-> int:
+    def return_card_value(self) -> int:
         card_value_to_int = 0
         if self.value == "A":
             return 1
