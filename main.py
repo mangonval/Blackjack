@@ -7,19 +7,13 @@ from player import Player
 
 def initialize_blackjack_game():
     for _ in range(2):
-        card_to_add = Blackjack.deal_cards(deck.cards)
-        user.hand.add_card_to_hand(card_to_add)
-        deck.cards.remove(card_to_add)
-        card_to_add = Blackjack.deal_cards(deck.cards)
-        dealer.hand.add_card_to_hand(card_to_add)
-        deck.cards.remove(card_to_add)
+        user.hand.add_card_to_hand(blackjack.get_random_card_from_deck())
+        dealer.hand.add_card_to_hand(blackjack.get_random_card_from_deck())
 
 
 game_controller = GameController()
 blackjack = Blackjack()
-deck_data = pandas.read_csv("blackjack_cards.csv")
-deck = Deck(deck_data.values.tolist())
-for card in deck.cards:
+for card in blackjack.deck.cards:
     print(f"{card.value} {card.suit}")
 
 
@@ -39,8 +33,8 @@ while blackjack.is_user_turn and not blackjack.user_won and not blackjack.user_b
     print(f"This is the dealer hand: {dealer.hand.cards[1].value}")
     player_decision = input(f"What do you want to do? 'hit', 'stand': ")
     if player_decision.lower() == "hit":
-        random_card = game_controller.deal_cards(deck.cards)
-        user.hand.cards.append(random_card)
+        random_card = blackjack.get_random_card_from_deck(deck.cards)
+        user.hand.add_card_to_hand(random_card)
         deck.cards.remove(random_card)
     elif player_decision.lower() == "stand":
         blackjack.is_user_turn = False

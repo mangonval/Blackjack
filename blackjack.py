@@ -1,15 +1,25 @@
 import random
 
+import pandas
+
+from deck import Deck
 from card import Card
 
 
-class Blackjack():
+class Blackjack:
     def __init__(self):
         self.user_busted = None
         self.is_user_turn = True
         self.is_dealer_turn = True
         self.user_busted = False
         self.user_won = False
+        self.deck = Deck()
 
-    def deal_cards(self, deck) -> Card:
-        return random.choice(deck)
+    def get_random_card_from_deck(self) -> Card:
+        random_card = random.choice(self.deck.cards)
+        self.deck.cards.remove(random_card)
+        return random_card
+
+    def create_new_deck_from_csv(self):
+        deck_data = pandas.read_csv("blackjack_cards.csv")
+        self.deck = Deck(deck_data.values.tolist())
