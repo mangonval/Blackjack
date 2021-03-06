@@ -13,7 +13,7 @@ class Blackjack:
         self.is_dealer_turn = True
         self.user_busted = False
         self.user_won = False
-        self.deck = Deck()
+        self.deck = self.create_new_deck_from_csv()
 
     def get_random_card_from_deck(self) -> Card:
         random_card = random.choice(self.deck.cards)
@@ -22,4 +22,4 @@ class Blackjack:
 
     def create_new_deck_from_csv(self):
         deck_data = pandas.read_csv("blackjack_cards.csv")
-        self.deck = Deck(deck_data.values.tolist())
+        return Deck(deck_data.values.tolist())

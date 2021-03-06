@@ -4,6 +4,7 @@ class Hand:
         self.score = 0
 
     def calculate_score(self):
+        self.score = 0
         for card in self.cards:
             if card.value == "A":
                 self.score += 1
