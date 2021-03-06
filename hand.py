@@ -2,14 +2,8 @@ class Hand:
     def __init__(self):
         self.cards = []
         self.score = 0
-        self.available_games = {
-            "blackjack": self.calculate_score_for_blackjack
-        }
 
-    def calculate_score(self, game_being_played):
-        self.available_games[game_being_played]
-
-    def calculate_score_for_blackjack(self):
+    def calculate_score(self):
         for card in self.cards:
             if card.value == "A":
                 self.score += 1
@@ -20,3 +14,7 @@ class Hand:
         for card in self.cards:
             if card.value == "A" and self.score + 10 <= 21:
                 self.score += 10
+
+    def add_card_to_hand(self, card_to_add):
+        self.cards.append(card_to_add)
+        self.calculate_score()
