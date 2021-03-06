@@ -20,6 +20,6 @@ class Blackjack:
         self.deck.cards.remove(random_card)
         return random_card
 
-    def create_new_deck_from_csv(self):
+    def create_new_deck_from_csv(self) -> Deck:
         deck_data = pandas.read_csv("blackjack_cards.csv")
         return Deck(deck_data.values.tolist())
