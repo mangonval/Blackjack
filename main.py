@@ -28,12 +28,12 @@ while blackjack.is_user_turn and not blackjack.user_won and not blackjack.user_b
     if player.hand.score > 21:
         blackjack.user_busted = True
 
-if dealer.hand.score >= 17 or blackjack.user_won:
+if dealer.dealer_has_to_stand() or blackjack.user_won:
     blackjack.is_dealer_turn = False
 
 while blackjack.is_dealer_turn and not blackjack.user_busted:
     dealer.hand.add_card_to_hand(blackjack.get_random_card_from_deck())
-    if dealer.hand.score >= 17:
+    if dealer.dealer_has_to_stand():
         blackjack.is_dealer_turn = False
 
 if blackjack.user_won:
@@ -52,7 +52,3 @@ else:
     print(f"This is your hand: {player.convert_hand_to_list()} with a score of: {player.hand.score}")
     print(f"This is the dealer's hand : {dealer.convert_hand_to_list()} with a score of: {dealer.hand.score}")
     print("You lost!")
-
-#
-# game_controller = GameController()
-# print(f"Score: {game_controller.calculate_score(sorted(deck.cards, key=lambda card: card.return_card_value()))}")
